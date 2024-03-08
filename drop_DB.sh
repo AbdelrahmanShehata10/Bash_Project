@@ -5,8 +5,8 @@ shopt -s extglob
 while true; do
   read -p "Enter your DB name Or "\"back\"" to back >> " DBname
                 if [[ $DBname =~ $valid_pattern ]] &&  [ -d "$DBname" ] && [ $DBname != "back" ] ; then
-                    cd ./$DBname
- echo "Database Connected"
+                    rm -r ./$DBname
+ echo "Database deleted"
                     break
 elif [ $DBname == "back" ]
 then 
@@ -15,5 +15,3 @@ break
                     echo "Invalid DB name"
                 fi
 done
-source ../../Create_Table.sh
-
