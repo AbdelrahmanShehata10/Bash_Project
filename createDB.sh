@@ -9,7 +9,7 @@ while true; do
                     break
 elif [ -d "$DBname" ]
 then 
-echo "Already exist "
+echo "This DB Already exist "
 elif [ $DBname == "back" ]
 then 
 break
