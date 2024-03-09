@@ -3,7 +3,7 @@ export LC_COLLATE=C
 shopt -s extglob
 declare -a columns
 declare -a type
-asdasd
+
 select order in "Create Table" "List Tables" "Insert" "Select" "Delete from table" "Update row" "Drop Table" "exit"
 do
 case $REPLY in
