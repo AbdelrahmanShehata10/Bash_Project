@@ -21,6 +21,7 @@ if [ $flag -eq 0 ]
 then 
 mkdir ./Database
 echo "Database Installed succesfuly"
+
 else 
         echo "Database_Sys exists"
 fi
