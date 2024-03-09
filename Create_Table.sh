@@ -45,7 +45,7 @@ done
 ls ./
 ;;
 "3")
-source ../../Insert_To_Table.sh
+source $current_script_path/Insert_To_Table.sh
 ;;
 "4")
 break
@@ -60,6 +60,9 @@ break
 break
 ;;
 "8")
+cd ../
+echo $PWD
+
 break
 ;;
 *)
