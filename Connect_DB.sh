@@ -9,7 +9,7 @@ while true; do
                         echo $PWD
 
  echo "Database Connected"
- source $current_script_path/Create_Table.sh
+ source $current_script_path/manage_Table.sh
 
                     break
 elif [ $DBname == "back" ]
