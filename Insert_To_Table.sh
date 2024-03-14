@@ -4,7 +4,7 @@ shopt -s extglob
 declare value
 declare Table_F_2_Lines
 value=''
-
+flag=0
 get_type() {
     val="$1"
 
@@ -23,20 +23,26 @@ do
 	then
 		Table_Fields=$(head -n 1 "$Table_Name.csv")
 		Data_Types=$(head -n 2 "$Table_Name.csv" | tail -n 1)
+prim_key=$(awk -F: '{ if ( NR==2 ) { gsub(/ /, "", $2) ;print($2) }}' "${Table_Name}_meta.csv")
+#echo "$prim_key"
+
 
 		read  -a Fields_Array <<< "$Table_Fields"
 		read  -a Types_Array <<< "$Data_Types"
 
 		while true; 
 		do
-			echo "Enter record values OR enter "\"back\""  to back"
+			echo "Enter record values "\($Table_Fields\)" OR enter "\"back\""  to back"
 			read -r -a record_array
 
 			#----check that there is no pk with same data--- #
 			#------storing in pk variable the output of awk command to-------#
+pk=$(awk -F: -v p=$prim_key -v record="${record_array[$prim_key-1]}" 'BEGIN {pk="valid"} {if(record==$p){pk="found";}} END{print (pk); }' "$Table_Name.csv")
 
-			pk=$(awk -F: -v record="${record_array[0]}" 'BEGIN {pk="valid"} {if(record==$1){pk="found";}} END{print pk;}' "$Table_Name.csv")
-			#echo "last is $pk"
+#		echo "last is $pk"
+#echo "$prim_key"
+#echo "${record_array[prim_key-1]}"
+
 				if [ "$pk" != "found" ] && [ -n "$record_array" ] && [[ "${#record_array[@]}" -eq "${#Fields_Array[@]}" ]] && [ "${record_array[0]}" != "back" ] #------(-n option check that this value not empty) ------#
 					then 
 					break
@@ -45,8 +51,11 @@ do
 				elif [ "${record_array[0]}" == "back" ] && [[ "${#record_array[@]}" -eq 1 ]]
 					then
 					break		
-				else 
+				elif [ "$pk" == "found" ] 
+then
 					echo "please enter your data with unique Primary key"
+else 
+echo "Invalid Input"
 				fi
 
 		done
@@ -58,17 +67,25 @@ if [[ "${#record_array[@]}" -eq "${#Fields_Array[@]}" ]]; then
 			#echo $type
 			#echo $primary_key
 
-			if [[ "${Types_Array[i]}" == $type ]]; 
+			if [[ "${Types_Array[i]}" == "$type:" ]]; 
 			then
 			    value+="${record_array[i]}:"
 			    else
 			    echo "Error: Your input does not match the type for field ${Fields_Array[i]}"
+			    flag=1
 			 fi
 	        done
+
+if [ $flag -eq 0 ] 
+then
 		echo "$value" >> "$Table_Name.csv"  #-------echo after the end of for loop not while each iteration--------#
 		echo "Record inserted successfully"   
 		#pwd
 		break
+else 
+echo "Failed to insert data"
+fi
+
 fi
 	elif [ $Table_Name == "back" ]
 	then

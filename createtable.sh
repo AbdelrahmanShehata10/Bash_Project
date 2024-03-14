@@ -2,7 +2,7 @@
 export LC_COLLATE=C
 shopt -s extglob
 
-declare -a columns
+export declare -a columns
 declare -a type
 
 while true; do
@@ -12,7 +12,7 @@ while true; do
  then
  	while true; 
 	do      
-		 read -p "Enter the number of columns for $Tname: " num_columns
+		 read -p "Enter the number of columns for $Tname:" num_columns
 		if [[ $num_columns =~ [2-9] ]]
 			then
 			break
@@ -26,7 +26,7 @@ while true; do
  do
 	while true;
 	 do 
-		read -p "Enter the name of column $i: " column_name
+		read -p "Enter the name of column $i:" column_name
 		if [ -n "$column_name" ] && [[ $column_name =~ $valid_pattern ]]
 		then
 		break;
@@ -35,11 +35,11 @@ while true; do
 		continue		
 		fi
         done
-columns+=("$column_name")
+ columns+=("$column_name:")
 
 	while true; 
 	do 
-		read -p "Enter the types of column $i: " column_type
+		read -p "Enter the types of column $i:" column_type
 		if [ -n "$column_type" ] && [[ "$column_type" == "int" || "$column_type" == "string" ]];
 		then
 		break;
@@ -49,13 +49,13 @@ columns+=("$column_name")
 		fi
 	done
 
-types+=("$column_type")
+types+=("$column_type:")
 
  done
 
 while true; do 
 read -p "Please indicate the primary key: " primary_key
-if [ -n "$primary_key" ] && [[ " ${columns[*]} " =~ " $primary_key " ]]
+if [ -n "$primary_key" ] && [[ "${columns[*]}" =~ "$primary_key:" ]]
 then
 	break
                 else 
@@ -64,10 +64,17 @@ then
 fi
 done
 
+
+
 	touch  "./$Tname.csv"
-	 echo "Table $Tname created with columns: ${columns[*]} and primary key: $primary_key"
+touch  "./"$Tname"_meta.csv"
+	 echo "Table $Tname created with columns: ${columns[*]} and primary key:$primary_key"
 	echo "${columns[*]}">>"./$Tname.csv"
 	echo "${types[*]}">>"./$Tname.csv"
+ pk_field=$(awk -F ':' -v primary_key="$primary_key" 'NR==1 { count =0 ;for (i=1; i<=NF; i++){count++;gsub(/ /, "", $i); if ($i==primary_key) { break;} } } END { print count }' "./$Tname.csv")
+
+echo "columns_no:Primary_key in filed "  >>"./"$Tname"_meta.csv"
+echo "$num_columns:$pk_field"  >>"./"$Tname"_meta.csv"
 	break
 
 elif [ $Tname == "back" ]
