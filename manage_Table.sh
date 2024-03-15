@@ -21,13 +21,13 @@ source $current_script_path/Insert_To_Table.sh
 source $current_script_path/select.sh
 ;;
 "5")
-break
+source $current_script_path/delete.sh
 ;;
 "6")
 break
 ;;
 "7")
-break
+source $current_script_path/drop.sh
 ;;
 "8")
 cd ../

@@ -39,7 +39,7 @@ while true; do
 
 	while true; 
 	do 
-		read -p "Enter the types of column $i:" column_type
+		read -p "Enter the types of column (string/int) $i:" column_type
 		if [ -n "$column_type" ] && [[ "$column_type" == "int" || "$column_type" == "string" ]];
 		then
 		break;
