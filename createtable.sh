@@ -2,7 +2,7 @@
 export LC_COLLATE=C
 shopt -s extglob
 
-export declare -a columns
+declare -a columns
 declare -a type
 
 while true; do
@@ -77,7 +77,7 @@ echo "columns_no:Primary_key in filed "  >>"./"$Tname"_meta.csv"
 echo "$num_columns:$pk_field"  >>"./"$Tname"_meta.csv"
 	break
 
-elif [ $Tname == "back" ]
+elif [ "$Tname" == "back" ]
 then 
 break
 elif [ -f "./$Tname.csv" ]
